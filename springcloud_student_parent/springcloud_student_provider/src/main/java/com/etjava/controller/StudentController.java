@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etjava.entity.Student;
 import com.etjava.service.StudentService;
 
+/**
+ *	服务提供者Controller
+ * @author etjav
+ *
+ */
 @RestController
 @RequestMapping("/student")
 public class StudentController {
