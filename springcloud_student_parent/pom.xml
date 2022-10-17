@@ -36,4 +36,7 @@
         </dependency>
       </dependencies>
   </dependencyManagement>
+   <modules>
+   	<module>springcloud_student_common</module>
+   </modules>
 </project>
