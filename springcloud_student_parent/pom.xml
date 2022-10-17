@@ -39,5 +39,6 @@
    <modules>
    	<module>springcloud_student_common</module>
    	<module>springcloud_student_provider</module>
+   	<module>springcloud_student-consumer</module>
    </modules>
 </project>

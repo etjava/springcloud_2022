@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +22,13 @@ public class StudentController {
 	    private StudentService studentService;
 	     
 	    /**
-	     * 添加或者修改学生信息
+	     * 	添加或者修改学生信息
+	     * 	服务提供者在接收数据时需要使用@RequestBody 否则接收不到数据
 	     * @param student
 	     * @return
 	     */
 	    @PostMapping(value="/save")
-	    public boolean save(Student student){
+	    public boolean save(@RequestBody Student student){
 	        try{
 	            studentService.save(student);  
 	            return true;
@@ -36,7 +38,7 @@ public class StudentController {
 	    }
 	     
 	    /**
-	     * 查询学生信息
+	     * 	查询学生信息
 	     * @return
 	     */
 	    @GetMapping(value="/list")
@@ -45,7 +47,7 @@ public class StudentController {
 	    }
 	     
 	    /**
-	     * 根据id查询学生信息
+	     * 	根据id查询学生信息
 	     * @return
 	     */
 	    @GetMapping(value="/get/{id}")
@@ -54,7 +56,7 @@ public class StudentController {
 	    }
 	     
 	    /**
-	     * 根据id删除学生信息
+	     * 	根据id删除学生信息
 	     * @return
 	     */
 	    @GetMapping(value="/delete/{id}")
