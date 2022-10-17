@@ -38,5 +38,6 @@
   </dependencyManagement>
    <modules>
    	<module>springcloud_student_common</module>
+   	<module>springcloud_student_provider</module>
    </modules>
 </project>
