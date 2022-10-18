@@ -10,3 +10,5 @@
 
 ### springcloud_student-consumer 服务消费者 远程注册中心的服务
 -- 通过RestTemplate进行对远程服务调用
+
+## Eureka1.x 服务注册中心搭建
