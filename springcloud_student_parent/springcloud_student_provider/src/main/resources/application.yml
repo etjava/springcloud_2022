@@ -4,6 +4,9 @@ server:
  
 # 数据源配置
 spring:
+  application:
+                # 应用名称  这里消费者使用Ribbon在调用时需要根据该名称调用 这里不能使用下环线 否则消费者那边使用同样的名称 调用不到
+      name: student-provider22 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -17,8 +20,8 @@ spring:
 eureka:
   instance:
     hostname: localhost  #eureka客户端主机实例名称
-    appname: student_provider  #客户端服务名
-    instance-id: student_provider:1001 #客户端实例名称
+    appname: student-provider  #客户端服务名
+    instance-id: student-provider:1001 #客户端实例名称
     prefer-ip-address: true #显示IP
   client: 
     service-url: 

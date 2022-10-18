@@ -49,7 +49,7 @@ public class StudentConsumerController {
      */
     @GetMapping(value="/list")
     public List<Student> list(){
-        return restTemplate.getForObject(HOST+"/student/list", List.class);
+        return restTemplate.getForObject("http://STUDENT-PROVIDER/student/list", List.class);
     }
      
     /**
