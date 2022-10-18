@@ -5,7 +5,6 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <!-- 父模块 统一管理其他模块依赖关系 -->
-  
    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
