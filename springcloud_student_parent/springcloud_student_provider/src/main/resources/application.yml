@@ -14,3 +14,20 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: student_provider  #客户端服务名
+    instance-id: student_provider:1001 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client: 
+    service-url: 
+      defaultZone: http://localhost:2001/eureka   #把服务注册到eureka注册中心 这里的defaultZone要和前面服务注册中心的暴露地址一致；
+      
+      
+info: 
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: 张三
+   联系电话: 123456
