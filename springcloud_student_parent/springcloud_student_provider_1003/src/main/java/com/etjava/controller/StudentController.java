@@ -48,7 +48,7 @@ public class StudentController {
 	     */
 	    @GetMapping(value="/list")
 	    public List<Student> list(){
-	    	System.out.println("provider ------------------------------ 1001");
+	    	System.out.println("provider ------------------------------ 1003");
 	        return studentService.list();
 	    }
 	     

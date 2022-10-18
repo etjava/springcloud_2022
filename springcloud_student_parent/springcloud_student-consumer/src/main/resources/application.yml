@@ -18,4 +18,4 @@ eureka:
 
 # 集群版 STUDENT-PROVIDER22 对应的是服务提供者配置文件中的application.name的值 
 # 这里只能使用中划线 不能使用下划线 提供者那边也只能使用中划线
-provider_host: http://STUDENT-PROVIDER22
+provider_host: http://STUDENT-PROVIDER

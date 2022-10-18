@@ -1,5 +1,5 @@
 server:
-  port: 1001
+  port: 1003
   context-path: /
  
 # 数据源配置
@@ -21,19 +21,21 @@ eureka:
   instance:
     hostname: localhost  #eureka客户端主机实例名称
     appname: student-provider  #客户端服务名
-    instance-id: student-provider:1001 #客户端实例名称
+    instance-id: student-provider:1003 #客户端实例名称
     prefer-ip-address: true #显示IP
   client: 
     service-url: 
                  # 单机 - 把服务注册到eureka注册中心 这里的defaultZone要和前面服务注册中心的暴露地址一致
       # defaultZone: http://localhost:2001/eureka   
                   # 集群
-      defaultZone: http://eureka2001.etjava.com:2001/eureka,http://eureka2002.etjava.com:2002/eureka,http://eureka2002.etjava.com:2002/eureka
+      defaultZone: http://eureka2001.etjava.com:2001/eureka,
+        http://eureka2002.etjava.com:2002/eureka,
+        http://eureka2002.etjava.com:2002/eureka
       
       
 info: 
    groupId: $project.groupId$
    artifactId: $project.artifactId$
    version: $project.version$
-   负责人: 张三
+   负责人: 王五
    联系电话: 123456

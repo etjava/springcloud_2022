@@ -67,5 +67,7 @@
    	<module>springcloud_etudent_eureka_2000</module>
    	<module>springcloud_student_eureka_2002</module>
    	<module>springcloud_student_eureka_2003</module>
+   	<module>springcloud_student_provider_1002</module>
+   	<module>springcloud_student_provider_1003</module>
    </modules>
 </project>
