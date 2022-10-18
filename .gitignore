@@ -7,5 +7,5 @@
 .gitignore
 target/
 /.metadata/
-/springcloud_student_parent/
+
 
