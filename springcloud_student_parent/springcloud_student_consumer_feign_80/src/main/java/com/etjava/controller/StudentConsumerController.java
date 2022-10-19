@@ -1,6 +1,7 @@
 package com.etjava.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etjava.entity.Student;
@@ -65,5 +67,15 @@ public class StudentConsumerController {
     @GetMapping(value="/delete/{id}")
     public boolean delete(@PathVariable("id") Integer id){
     	return studentServiceWithFeign.delete(id);
+    }
+    
+    /**
+     * 	模拟Hystrix熔断和降级处理
+     * @return
+     */
+    @GetMapping(value="/getInfo")
+    @ResponseBody
+    public Map<String,Object> getInfo(){
+        return studentServiceWithFeign.getInfo();
     }
 }

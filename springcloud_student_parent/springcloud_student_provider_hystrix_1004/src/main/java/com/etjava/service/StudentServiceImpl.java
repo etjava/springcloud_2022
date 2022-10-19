@@ -1,6 +1,8 @@
 package com.etjava.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -33,5 +35,13 @@ public class StudentServiceImpl implements StudentService{
 	@Override
 	public void delete(Integer id) {
 		studentRepository.delete(id);
+	}
+
+	@Override
+	public Map<String, Object> getInfo() {
+		Map<String,Object> map=new HashMap<String,Object>();
+	    map.put("code", 200);
+	    map.put("info", "业务数据-----------1004");
+	    return map;
 	}
 }

@@ -11,7 +11,10 @@ eureka:
       defaultZone: http://eureka2001.etjava.com:2001/eureka/,
                     http://eureka2002.etjava.com:2002/eureka/,
                     http://eureka2003.etjava.com:2003/eureka/
-
+# 开启hystrix断路器
+feign: 
+  hystrix: 
+    enabled: true
 
 # 单机 需要指定服务提供者的IP+端口
 # provider_host: http://localhost:1001
