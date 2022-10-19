@@ -68,5 +68,6 @@
    	<module>springcloud_student_eureka_2003</module>
    	<module>springcloud_student_provider_1002</module>
    	<module>springcloud_student_provider_1003</module>
+   	<module>springcloud_student_consumer_feign_80</module>
    </modules>
 </project>
