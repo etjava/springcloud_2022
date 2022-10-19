@@ -30,7 +30,7 @@ eureka:
                   # 集群
       defaultZone: http://eureka2001.etjava.com:2001/eureka,
         http://eureka2002.etjava.com:2002/eureka,
-        http://eureka2002.etjava.com:2002/eureka
+        http://eureka2003.etjava.com:2003/eureka
       
       
 info: 
