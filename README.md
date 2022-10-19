@@ -21,3 +21,11 @@
 #### springcloud_etudent_eureka_2002 eureka注册中心2
 #### springcloud_etudent_eureka_2003 eureka注册中心3
 
+
+
+
+
+
+# 分支介绍
+## 2022分支 从基础搭建到Hystrix熔断降级
+## 2022.1 分支 Hystrix,feign 整合使用 实现彻底解耦
