@@ -1,6 +1,7 @@
 package com.etjava.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,6 +35,18 @@ public class StudentConsumerController {
 	@Value("${provider_host}")
 	private String HOST;
 	
+	
+	/**
+	 * 	模拟hystrix处理雪崩效应
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@GetMapping(value="/getInfo")
+	@ResponseBody
+	public Map<String,Object> getInfo(){
+	    return restTemplate.getForObject(HOST+"/student/getInfo/", Map.class);
+	}
+	
 	/**
      * 	添加或者修改学生信息
      * @param student
@@ -47,9 +61,10 @@ public class StudentConsumerController {
      * 	查询学生信息
      * @return
      */
-    @GetMapping(value="/list")
+    @SuppressWarnings("unchecked")
+	@GetMapping(value="/list")
     public List<Student> list(){
-        return restTemplate.getForObject("http://STUDENT-PROVIDER/student/list", List.class);
+        return restTemplate.getForObject(HOST+"/student/list", List.class);
     }
      
     /**
