@@ -15,6 +15,20 @@ eureka:
 feign: 
   hystrix: 
     enabled: true
+    
+# 配置ribbon的超时时间
+ribbon: 
+  ReadTimeout: 10000
+  ConnectTimeout: 9000
+  
+# 配置hystrix熔断降级的等待时间
+hystrix: 
+  command: 
+    default: 
+      execution: 
+        isolation: 
+          thread: 
+            timeoutInMilliseconds: 3000
 
 # 单机 需要指定服务提供者的IP+端口
 # provider_host: http://localhost:1001
