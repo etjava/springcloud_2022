@@ -73,5 +73,7 @@
    	<module>
    		springcloud_student_consumer_hystrix_dashborad_90
    	</module>
+   	<module>springcloud_student_provider_hystrix_1005</module>
+   	<module>springcloud_student_consumer_hystrix_turbine_91</module>
    </modules>
 </project>

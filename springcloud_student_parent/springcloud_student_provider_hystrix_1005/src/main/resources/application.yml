@@ -1,0 +1,50 @@
+server:
+  port: 1005
+  context-path: /
+ 
+# 数据源配置
+spring:
+  application:
+                # 应用名称  这里消费者使用Ribbon在调用时需要根据该名称调用 这里不能使用下环线 否则消费者那边使用同样的名称 调用不到
+      name: student-provider
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: student-provider  #客户端服务名
+    instance-id: student-provider-hystrix:1005 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client: 
+    service-url: 
+                 # 单机 - 把服务注册到eureka注册中心 这里的defaultZone要和前面服务注册中心的暴露地址一致
+      # defaultZone: http://localhost:2001/eureka   
+                  # 集群
+      defaultZone: http://eureka2001.etjava.com:2001/eureka,
+        http://eureka2002.etjava.com:2002/eureka,
+        http://eureka2002.etjava.com:2002/eureka
+
+# 配置hystrix熔断降级的等待时间
+hystrix: 
+  command: 
+    default: 
+      execution: 
+        isolation: 
+          thread: 
+            timeoutInMilliseconds: 3000
+      
+      
+info: 
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: 王五
+   联系电话: 123456
