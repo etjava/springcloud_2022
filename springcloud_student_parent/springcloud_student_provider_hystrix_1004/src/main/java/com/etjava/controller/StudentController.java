@@ -88,7 +88,7 @@ public class StudentController {
     @GetMapping(value="/getInfo")
     @HystrixCommand(fallbackMethod="getInfoFallback")
     public Map<String,Object> getInfo() throws InterruptedException{
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("code", 200);
         map.put("info", "业务数据xxxxx");
