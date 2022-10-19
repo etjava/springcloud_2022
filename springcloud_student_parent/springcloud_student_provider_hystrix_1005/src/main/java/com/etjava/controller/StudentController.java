@@ -84,21 +84,28 @@ public class StudentController {
      * @return
      * @throws InterruptedException 
      */
+//    @ResponseBody
+//    @GetMapping(value="/getInfo")
+//    @HystrixCommand(fallbackMethod="getInfoFallback")
+//    public Map<String,Object> getInfo() throws InterruptedException{
+//        Thread.sleep(1000);
+//        Map<String,Object> map=new HashMap<String,Object>();
+//        map.put("code", 200);
+//        map.put("info", "业务数据---------1005");
+//        return map;
+//    }
+//     
+//    public Map<String,Object> getInfoFallback() throws InterruptedException{
+//        Map<String,Object> map=new HashMap<String,Object>();
+//        map.put("code", 500);
+//        map.put("info", "系统出错，稍后重试 1005");
+//        return map;
+//    }
+    
     @ResponseBody
     @GetMapping(value="/getInfo")
-    @HystrixCommand(fallbackMethod="getInfoFallback")
     public Map<String,Object> getInfo() throws InterruptedException{
-        Thread.sleep(1000);
-        Map<String,Object> map=new HashMap<String,Object>();
-        map.put("code", 200);
-        map.put("info", "业务数据---------1005");
-        return map;
-    }
-     
-    public Map<String,Object> getInfoFallback() throws InterruptedException{
-        Map<String,Object> map=new HashMap<String,Object>();
-        map.put("code", 500);
-        map.put("info", "系统出错，稍后重试 1005");
-        return map;
+        Thread.sleep(2000);
+        return studentService.getInfo();
     }
 }

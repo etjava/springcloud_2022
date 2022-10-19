@@ -1,6 +1,7 @@
 package com.etjava.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +15,12 @@ import com.etjava.entity.Student;
  *	@FeignClient(value="STUDENT-PROVIDER")	该接口需要指定访问的实例名称 即 application.name 不需要填写http:// 底层封装了
  *	底层实现由feign帮着实现了 类似MybatisPlus
  *  	
+ * fallbackFactory=StudentClientFallbackFactory.class
+ * 	当出现异常时的回调类 这里配置的类就是实现降级处理的类 也就是实现了FallbackFactory的类
  * @author etjav
  *
  */
-@FeignClient(value="STUDENT-PROVIDER")
+@FeignClient(value="STUDENT-PROVIDER",fallbackFactory=StudentClientFallbackFactory.class)
 public interface StudentServiceWithFeign {
 
 	 /**
@@ -49,5 +52,12 @@ public interface StudentServiceWithFeign {
      */
     @GetMapping(value="/student/delete/{id}")
     public boolean delete(@PathVariable("id") Integer id);
+    
+    /**
+     * 	模拟hystrix熔断降级
+     * @return
+     */
+    @GetMapping(value="/student/getInfo")
+    public Map<String,Object> getInfo();
 	
 }
