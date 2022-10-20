@@ -1,0 +1,25 @@
+server:
+  port: 91
+  context-path: /
+  
+# 这里需要监控的是集群 因此需要配置eureka
+eureka:
+  client:
+    #register-with-eureka: false  由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以设置为false
+    register-with-eureka: false 
+    service-url: 
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                    http://eureka2002.etjava.com:2002/eureka/,
+                    http://eureka2003.etjava.com:2003/eureka/
+  
+turbine: 
+  app-config: student-provider   # 指定要监控的应用名称
+  #表示集群的名字为default 如果不使用default 则在查看集群是需要带 参数
+  clusterNameExpression: "'default'" 
+
+spring: 
+  application: 
+    name: turbine # 应用名称
+
+
+provider_host: http://STUDENT-PROVIDER

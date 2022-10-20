@@ -1,0 +1,9 @@
+spring: 
+  application:
+    name: microservice-eureka-server-config
+  cloud:
+    config:
+      name: eureka_config
+      uri: http://localhost:6001  # 配置configserver地址
+      profile: dev  # 级别
+      label: master  # 分支 git中 默认master

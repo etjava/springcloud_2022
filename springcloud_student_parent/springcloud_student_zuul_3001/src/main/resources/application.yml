@@ -1,0 +1,40 @@
+server:
+  port: 3001
+  context-path: /
+# 应用实例名称
+spring:
+  application:
+    name: student-zuul
+
+# 配置注册中心，路由网关需要注册到注册中心 否则无法通过网关进行调用其它服务
+eureka:
+  instance:
+    instance-id: student-zuul:3001 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client: 
+    service-url: 
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,http://eureka2002.etjava.com:2002/eureka/,http://eureka2003.etjava.com:2003/eureka/ # 集群
+
+# 配置路由规则 屏蔽直接通过应用实例名称直接调用服务
+zuul:
+      # 屏蔽通过服务实例名称进行访问 如果屏蔽单个服务实例 直接写服务实例名称，多个使用星号表示
+  # 只屏蔽某一个服务  ignored-services: "student-provider" 
+  # 屏蔽某一个服务后访问时404代替
+  # 屏蔽多个 即 ignored-services: "*" 会自动映射成指定的path访问路径 不会使用404
+  ignored-services: "*" 
+  prefix: /etjava # 指定请求的前缀 如果指定了访问时的前缀 在访问时必须带上 否则404
+  routes:
+    # studentServer是随意取的 但后边的serviceId及path是固定写法
+    # serviceId 指定要进行映射的服务名称 path是映射成的访问路径
+    studentServer.serviceId: student-provider # 服务提供者的实例名称
+    studentServer.path: /studentServer/** # 映射后的请求服务名称 隐藏原有的服务实例名称
+
+
+
+info: 
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: 王五
+   联系电话: 123456
+   

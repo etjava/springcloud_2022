@@ -4,14 +4,13 @@
   <artifactId>springcloud_student_parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  
+  <!-- 父模块 统一管理其他模块依赖关系 -->
    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <druid.version>1.1.10</druid.version>
   </properties>
-  
    <dependencyManagement>
       <dependencies>
           <dependency>
@@ -36,7 +35,50 @@
         </dependency>
       </dependencies>
   </dependencyManagement>
+  
+  	<!-- 构建的时候 解析 src/main/resources 下的配置文件  其实就是application.yml 解析以$开头和结尾的信息 -->
+	<build>
+	    <finalName>microservice</finalName>
+	    <resources>
+	        <resource>
+	            <directory>src/main/resources</directory>
+	            <filtering>true</filtering>
+	        </resource>
+	    </resources>
+	    <plugins>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-resources-plugin</artifactId>
+	            <configuration>
+	                <delimiters>
+	                    <delimit>$</delimit>
+	                </delimiters>
+	            </configuration>
+	        </plugin>
+	    </plugins>
+	</build>
+  
    <modules>
    	<module>springcloud_student_common</module>
+   	<module>springcloud_student_provider</module>
+   	<module>springcloud_student-consumer</module>
+   	<module>springcloud_etudent_eureka_2000</module>
+   	<module>springcloud_student_eureka_2002</module>
+   	<module>springcloud_student_eureka_2003</module>
+   	<module>springcloud_student_provider_1002</module>
+   	<module>springcloud_student_provider_1003</module>
+   	<module>springcloud_student_consumer_feign_80</module>
+   	<module>springcloud_student_provider_hystrix_1004</module>
+   	<module>
+   		springcloud_student_consumer_hystrix_dashborad_90
+   	</module>
+   	<module>springcloud_student_provider_hystrix_1005</module>
+   	<module>springcloud_student_consumer_hystrix_turbine_91</module>
+   	<module>springcloud_student_zuul_3001</module>
+   	<module>springcloud_config_server_6001</module>
+   	<module>springcloud_config_client</module>
+   	<module>springcloud_student_eureka_server_config_2004</module>
+   	<module>springcloud_student_provider_config_1004</module>
+   	<module>springcloud_student_consumer_config_81</module>
    </modules>
 </project>
