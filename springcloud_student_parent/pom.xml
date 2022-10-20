@@ -80,5 +80,6 @@
    	<module>springcloud_config_client</module>
    	<module>springcloud_student_eureka_server_config_2004</module>
    	<module>springcloud_student_provider_config_1004</module>
+   	<module>springcloud_student_consumer_config_81</module>
    </modules>
 </project>

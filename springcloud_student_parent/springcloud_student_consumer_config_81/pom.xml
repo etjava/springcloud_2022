@@ -5,9 +5,9 @@
     <artifactId>springcloud_student_parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>springcloud_student-consumer</artifactId>
+  <artifactId>springcloud_student_consumer_config_81</artifactId>
   
-  <dependencies>
+   <dependencies>
       <dependency>
       	<groupId>com.etjava</groupId>
       	<artifactId>springcloud_student_common</artifactId>
@@ -17,14 +17,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <dependency>
-	  <groupId>org.springframework.boot</groupId>
-	  <artifactId>spring-boot-starter-tomcat</artifactId>
-	</dependency>
-    <dependency>
-	    <groupId>org.springframework.cloud</groupId>
-	    <artifactId>spring-cloud-starter-config</artifactId>
-	</dependency>
     
     <!-- ribbon相关依赖 -->
     <dependency>
