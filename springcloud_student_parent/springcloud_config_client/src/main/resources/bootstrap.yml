@@ -1,0 +1,11 @@
+spring: 
+  application: 
+    name: application-dev
+  cloud: 
+    config: 
+    # name和profile 分别对应文件的abc-dev.yml
+      name: abc
+      uri: http://localhost:6001/  # 配置configserver地址
+      profile: dev  # 级别
+      label: master  # 分支 git中 默认master
+      fail-fast: true

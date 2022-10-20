@@ -1,0 +1,17 @@
+server:
+  port: 6001
+  context-path: /
+  
+spring:
+  application:
+    name:  student-config
+  # 配置springcloud的config server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/etjava/springcloud-config-test # uri指向的是git仓库中的地址 注意不能带有后缀 即 .git
+          # 配置config的检索目录 如果检索不到会去找默认的application配置文件 都找不到会404
+#          search-paths: 
+#          - aaa
+#          - bbb

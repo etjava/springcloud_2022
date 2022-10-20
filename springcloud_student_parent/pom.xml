@@ -76,5 +76,10 @@
    	<module>springcloud_student_provider_hystrix_1005</module>
    	<module>springcloud_student_consumer_hystrix_turbine_91</module>
    	<module>springcloud_student_zuul_3001</module>
+   	<module>springcloud_config_server_6001</module>
+   	<module>springcloud_config_client</module>
+   	<module>springcloud_student_eureka_server_config_2004</module>
+   	<module>springcloud_student_provider_config_1004</module>
+   	<module>springcloud_student_consumer_config_81</module>
    </modules>
 </project>
