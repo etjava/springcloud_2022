@@ -7,5 +7,4 @@
 .gitignore
 target/
 /.metadata/
-springcloud_student_parent/springcloud_student_provider_config_1004/
- springcloud_student_parent/pom.xml
+
