@@ -3,12 +3,12 @@ spring:
     name: student-consumer-config
     
 # ribbon 相关配置
-eureka:
-  client:
-    #register-with-eureka: false  由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以设置为false
-    register-with-eureka: false 
-    service-url: 
-      defaultZone: http://localhost:2004/eureka/
+#eureka:
+#  client:
+#    #register-with-eureka: false  由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以设置为false
+#    register-with-eureka: false 
+#    service-url: 
+#      defaultZone: http://localhost:2004/eureka/
 
 
 # 单机 需要指定服务提供者的IP+端口
