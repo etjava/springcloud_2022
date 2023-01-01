@@ -298,3 +298,6 @@ Eureka Server之间通过复制的方式完成数据的同步，Eureka还提供�
 类似zookeeper，Eureka也是一个服务注册和发现组件，是SpringCloud的一个优秀子项目
 
 原理图
+
+![image](https://user-images.githubusercontent.com/47961027/210176346-3e27a8fc-0f34-4523-b63c-0dba9f598f19.png)
+
