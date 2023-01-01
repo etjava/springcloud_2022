@@ -1,7 +1,7 @@
 # springcloud 完整实例
 # 整体架构流程图
 
-# 模块介绍与创建
+# 模块介绍与搭建
 springcloud-parent-2023.1 父项目 maven project
 - common-2023.1 maven module 公共模块 用来存放公共组件 如实体，全局配置，各工具类等
 dependencies
@@ -176,8 +176,11 @@ public class ProviderApp_1001 {
     }
 }
 ```
-项目启动时会自动创建对应的数据库表
+* 项目启动时会自动创建对应的数据库表
+
 ![image](https://user-images.githubusercontent.com/47961027/210161073-77e46b61-3d95-43ad-8230-69195e8b0ac3.png)
-测试服务提供者
+* 测试服务提供者
+
+![image](https://user-images.githubusercontent.com/47961027/210161178-13a9a6fc-bcb5-4dcb-bbf7-284bf319c2d9.png)
 
 
