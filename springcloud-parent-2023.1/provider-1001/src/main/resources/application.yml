@@ -1,0 +1,18 @@
+server:
+  port: 1001
+  context-path: /
+ 
+# 数据源配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false

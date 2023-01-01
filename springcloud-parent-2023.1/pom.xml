@@ -40,5 +40,6 @@
 	</dependencyManagement>
 	<modules>
 		<module>common-2023.1</module>
+		<module>provider-1001</module>
 	</modules>
 </project>
