@@ -35,6 +35,29 @@ dependencies
     </plugins>
 </build>
 ```
+Teacher实体
+```
+@Entity
+@Table(name="t_teacher")
+public class Teacher implements Serializable{
+ 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+ 
+    @Id
+    @GeneratedValue
+    private Integer id; // 编号
+     
+    @Column(length=50)
+    private String name; // 姓名
+     
+    @Column(length=50)
+    private String subject; // 学科
+    // get & set ...
+}
+```
 公共模块创建完成后需要执行install 安装到本地库 方便其它业务模块集成
 - provider-1001 服务提供者模块 用来提供服务
 dependencies
