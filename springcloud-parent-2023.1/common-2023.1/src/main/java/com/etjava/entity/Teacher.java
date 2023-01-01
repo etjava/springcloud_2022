@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 学生信息实体
+ * 教师信息实体
  * @author Administrator
  *
  */

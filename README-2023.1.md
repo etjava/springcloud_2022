@@ -40,19 +40,19 @@ Teacher实体
 @Entity
 @Table(name="t_teacher")
 public class Teacher implements Serializable{
- 
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
- 
+
     @Id
     @GeneratedValue
     private Integer id; // 编号
-     
+
     @Column(length=50)
     private String name; // 姓名
-     
+
     @Column(length=50)
     private String subject; // 学科
     // get & set ...
@@ -206,4 +206,77 @@ public class ProviderApp_1001 {
 
 ![image](https://user-images.githubusercontent.com/47961027/210161178-13a9a6fc-bcb5-4dcb-bbf7-284bf319c2d9.png)
 
+- consumer-80 服务消费者 用来调用服务
+依赖
+```
+<dependency>
+    <groupId>com.etjava</groupId>
+    <artifactId>common-2023.1</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+RestTemplate配置 用来请求调用服务提供者提供的服务模板
+```
+@Configuration
+public class SpringCloudConfig {
+
+    /**
+     * 调用服务模版
+     * @return
+     */
+    @Bean
+    public RestTemplate getRestTemplate(){
+        return new RestTemplate();
+    }
+}
+```
+Controller 消费者端controller
+```
+@RestController
+@RequestMapping("/tea")
+public class CustomerConntroller {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private static String PRE_URL="http://localhost:1001";
+
+    @SuppressWarnings("unchecked")
+    @GetMapping("/list")
+    public List<Teacher> list(){
+        return restTemplate.getForObject(PRE_URL+"/tea/list", List.class);
+    }
+
+    @GetMapping("/get/{id}")
+    public Teacher get(@PathVariable("id") Integer id) {
+        return restTemplate.getForObject(PRE_URL+"/tea/get/"+id, Teacher.class);
+    }
+
+    @PostMapping("/save")
+    public boolean save(@RequestBody Teacher teacher) {
+        try {
+            restTemplate.postForObject(PRE_URL+"/tea/save", teacher, Boolean.class);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}
+
+```
+消费者端启动类
+```
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+public class ConsumerApp_80 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerApp_80.class, args);
+    }
+}
+```
+测试调用服务提供者提供的消息
 
