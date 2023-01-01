@@ -38,4 +38,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<modules>
+		<module>common-2023.1</module>
+	</modules>
 </project>

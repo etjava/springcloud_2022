@@ -7,4 +7,5 @@
 .gitignore
 target/
 /.metadata/
-
+./
+..
