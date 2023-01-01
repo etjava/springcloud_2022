@@ -280,3 +280,4 @@ public class ConsumerApp_80 {
 ```
 测试调用服务提供者提供的消息
 
+![image](https://user-images.githubusercontent.com/47961027/210161684-536d37ce-8bb9-4237-929c-9c5902de1335.png)
