@@ -177,3 +177,7 @@ public class ProviderApp_1001 {
 }
 ```
 项目启动时会自动创建对应的数据库表
+![image](https://user-images.githubusercontent.com/47961027/210161073-77e46b61-3d95-43ad-8230-69195e8b0ac3.png)
+测试服务提供者
+
+
