@@ -42,5 +42,6 @@
 		<module>common-2023.1</module>
 		<module>provider-1001</module>
 		<module>consumer-80</module>
+		<module>eureka-2000</module>
 	</modules>
 </project>

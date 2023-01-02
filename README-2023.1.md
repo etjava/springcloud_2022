@@ -301,3 +301,64 @@ Eureka Server之间通过复制的方式完成数据的同步，Eureka还提供�
 
 ![image](https://user-images.githubusercontent.com/47961027/210176346-3e27a8fc-0f34-4523-b63c-0dba9f598f19.png)
 
+# 搭建Eureka服务注册中心
+eureka注册中心分为server和client ，eureka自身作为server端 其它都是client ，服务端用来管理所有服务，客户端通过注册中心来调用服务
+
+- eureka-2000 eureka注册中心
+添加依赖
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-eureka-server</artifactId>
+</dependency>
+<!-- 修改后立即生效，热部署 -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>springloaded</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+</dependency>
+```
+application.yml
+```
+server:
+  port: 2000
+  context-path: /
+
+eureka:
+  instance:
+    #eureka注册中心实例名称
+    hostname: localhost
+  client:
+    #false 由于该应用为注册中心，所以设置为false,代表不向注册中心注册自己。
+    register-with-eureka: false
+    #false 由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以也设置为false
+    fetch-registry: false
+    service-url:
+       #设置与Eureka注册中心交互的地址，查询服务和注册服务用到  ==> http://localhost:2000/eureka
+       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+```
+EurekaServerApp_2000 启动类
+添加@EnableEurekaServer注解 表示开启eureka server
+```
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApp_2000 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApp_2000.class, args);
+    }
+}
+```
+
+
+
+
+
+
