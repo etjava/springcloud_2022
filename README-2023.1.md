@@ -356,6 +356,11 @@ public class EurekaServerApp_2000 {
     }
 }
 ```
+![image](https://user-images.githubusercontent.com/47961027/210212666-7c00d002-d180-4118-b430-eeae15b4572e.png)
+
+# Eureka注册服务提供者
+
+
 
 
 
