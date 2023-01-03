@@ -963,10 +963,14 @@ public class ConsumerFeignApp_80 {
 启动三个eureka,三个provider,最后启动带有feign的consumer进行调用
 ![image](https://user-images.githubusercontent.com/47961027/210408570-9a195b29-d715-4c3e-9983-8824c7accb0b.png)
 ![image](https://user-images.githubusercontent.com/47961027/210408593-84b67ad5-3d27-4464-b858-6d0ba7fbd601.png)
-测试Ribbon的负载均衡 
+测试Ribbon的负载均衡
 通过修改consumer-feign-80模块中的SpringCloudConfig.myRule 测试不同的负载均衡
 
-# Hystrix
+# Hystrix 断路器
+在微服务系统中 服务调用失败是不可避免的，例如网络超时，服务自身出现异常等，那么要怎么保证在一个服务出现异常时 不会导致整体服务失败呢，这个就是Hystrix需要做的事情
+
+Hystrix提供了熔断，隔离，Fallback，Cache，监控等功能，能够在一个或多个服务出现异常时保证系统依然可用
+
 
 
 
