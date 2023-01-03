@@ -16,3 +16,14 @@ spring:
     show-sql: true
   thymeleaf:
     cache: false
+    
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: microservice-student  #客户端服务名
+    instance-id: microservice-student:1001 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client: 
+    service-url: 
+      #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
+      defaultZone: http://localhost:2000/eureka

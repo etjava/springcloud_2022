@@ -360,8 +360,35 @@ public class EurekaServerApp_2000 {
 
 # Eureka注册服务提供者
 
+## 修改provider-1001 将其作为服务提供者注册到eureka注册中心
+新增依赖
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-eureka</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+```
+## application.yml 新增eureka配置
+```
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: microservice-student  #客户端服务名
+    instance-id: microservice-student:1001 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client:
+    service-url:
+      #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
+      defaultZone: http://localhost:2000/eureka
+```
+## ProviderApp_1001 启动类添加开启注解
+@EnableEurekaClient
 
-
+## 测试
 
 
 
