@@ -1222,4 +1222,6 @@ hystrix:
             timeoutInMilliseconds: 3000
 ```
 然后再次测试 如下
+只修改provider-hystrix-1004中的application配置文件中的hystrix默认超时时间
+![image](https://user-images.githubusercontent.com/47961027/210418919-e5d83f85-b4a2-483a-baae-dabb81fc9181.png)
 
