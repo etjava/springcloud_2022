@@ -976,11 +976,225 @@ Hystrix提供了熔断，隔离，Fallback，Cache，监控等功能，能够在
 ![image](https://user-images.githubusercontent.com/47961027/210410836-4873253b-5213-4078-8bb7-d743082b2645.png)
 如果多个用户请求一直处于阻塞状态就会导致整体服务不可使用 这种情况就是服务雪崩
 ![image](https://user-images.githubusercontent.com/47961027/210410980-2611cac1-5411-46a0-825e-979933525d30.png)
-## 解决雪崩效应 
+## 解决雪崩效应
 Hystrix服务熔断降级 @HystrixCommand fallbackMethod
 熔断机制是应对服务雪崩效应的一种微服务链路保护机制，当某个服务不可用或响应超时 会进行服务降级处理，进而熔断该节点的服务调用 快速返回自定义错误信息
+## 创建带有熔断机制的provider
+provider-hystrix-1004
+添加依赖
+```
+  <dependencies>
+    <dependency>
+        <groupId>com.etjava</groupId>
+        <artifactId>common-2023.1</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid</artifactId>
+    </dependency>
+    <!-- eureka注册中心依赖 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+
+    <!-- actuator监控引入 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- hystrix熔断相关依赖 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix</artifactId>
+    </dependency>
+</dependencies>
+```
+application.yml
+```
+server:
+  port: 1004
+  context-path: /
+
+# 数据源配置
+spring:
+  application:
+  # 服务名称 消费者需要通过该名称进行调用服务
+    name: provider-1004
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false
+
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: provider-1001  #客户端服务名
+    instance-id: microservice-student:1004 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client:
+    service-url:
+      #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
+#      defaultZone: http://localhost:2000/eureka
+# 单机    defaultZone: http://localhost:2001/eureka   #把服务注册到eureka注册中心
+     # 集群
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
 
 
 
+info:
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: Hystrix
+   联系电话: 123456
+```
+启动类
+启动类需要添加@EnableCircuitBreaker 注解开启熔断机制
+```
+@SpringBootApplication
+@EnableEurekaClient
+@EnableCircuitBreaker // 开启熔断
+public class ProviderApp_1004 {
 
+    public static void main(String[] args) {
+        SpringApplication.run(ProviderApp_1004.class, args);
+    }
+}
+```
+controller,repository,service 直接在其它provider中copy一份即可
+然后controller中新增validHystrix方法
+```
+ /**
+ * 测试验证带有熔断机制服务
+ * @return
+ * @throws InterruptedException
+ */
+@GetMapping(value="/validHystrix")
+@HystrixCommand(fallbackMethod="getInfoFallback")
+public Map<String,Object> validHystrix() throws InterruptedException{
+    Thread.sleep(2000);
+    Map<String,Object> map=new HashMap<String,Object>();
+    map.put("code", 200);
+    map.put("info", "业务数据-----1004");
+    return map;
+}
+
+public Map<String,Object> getInfoFallback() throws InterruptedException{
+    Map<String,Object> map=new HashMap<String,Object>();
+    map.put("code", 500);
+    map.put("info", "系统出错，稍后重试");
+    return map;
+}
+```
+创建测试hystrix的consumer
+consumer-hystrix-80
+添加依赖
+```
+  <dependencies>
+    <dependency>
+        <groupId>com.etjava</groupId>
+        <artifactId>common-2023.1</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-ribbon</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+</dependencies>
+```
+配置RestTemplate
+```
+/**
+ * SpringCloud相关配置
+ * @author Administrator
+ *
+ */
+@Configuration
+public class SpringCloudConfig {
+
+    /**
+     * 调用服务模版
+     * @return
+     */
+    @Bean
+    @LoadBalanced  // 引入ribbon负载均衡
+    public RestTemplate getRestTemplate(){
+        return new RestTemplate();
+    }
+    /**
+     * 自定义轮询算法
+     * @return
+     */
+    @Bean
+    public IRule myRule(){
+        return new RetryRule();
+    }
+}
+```
+controller中添加验证hystrix熔断机制方法
+```
+@RestController
+@RequestMapping("/tea")
+public class CustomerConntroller {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private static String PRE_URL="http://provider-1004";
+
+    @SuppressWarnings("unchecked")
+    @GetMapping(value="/validHystrix")
+    public Map<String,Object> validHystrix() throws InterruptedException{
+       return restTemplate.getForObject(PRE_URL+"/tea/validHystrix", Map.class);
+    }
+}
+```
+测试
+启动三个eureka,provider-hystrix-1004服务提供者，最后启动consumer-hystrix-80进行测试
 
