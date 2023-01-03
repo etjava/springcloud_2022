@@ -391,6 +391,7 @@ eureka:
 ## 测试
 启动eureka 在启动服务提供者
 
+![image](https://user-images.githubusercontent.com/47961027/210302141-d4e61992-6bf1-4e80-a4bf-57425c709359.png)
 
 
 ## 配置点击示例时提示信息
@@ -440,3 +441,15 @@ info:
    负责人: Tom
    联系电话: 123456
 ```
+![image](https://user-images.githubusercontent.com/47961027/210302212-81524f70-e244-40c3-af2a-f9cb79f26fe8.png)
+
+
+![image](https://user-images.githubusercontent.com/47961027/210302177-133a30cf-00a8-4cad-b14d-3f77b717af8c.png)
+
+# eureka高可用集群搭建
+
+
+
+
+
+
