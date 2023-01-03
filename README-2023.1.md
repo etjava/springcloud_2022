@@ -1226,3 +1226,20 @@ hystrix:
 ![image](https://user-images.githubusercontent.com/47961027/210418919-e5d83f85-b4a2-483a-baae-dabb81fc9181.png)
 
 ## Feign Hystrix整合&服务熔断服务降级彻底解耦
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
