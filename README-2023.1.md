@@ -713,6 +713,8 @@ private static String PRE_URL="http://provider-1001";
 ```
 测试
 启动三个eureka注册中心，然后启动provider 最后启动consumer进行服务调用
+![image](https://user-images.githubusercontent.com/47961027/210366634-9fc9f667-7116-4939-8fdc-6fa4ca4e4e9f.png)
+# Ribbon 负载均衡
 
 
 
