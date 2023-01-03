@@ -624,6 +624,95 @@ Ribbon是Netflix发布的负载均衡器，它有助于控制HTTP和TCP的客户
 在Spring Cloud中，当Ribbon与Eureka配合使用时，Ribbon可自动从Eureka Server获取服务提供者地址列表，并基于负载均衡算法，请求其中一个服务提供者实例 如下图
 ![image](https://user-images.githubusercontent.com/47961027/210363774-bf4531a6-f899-4202-a319-14d84f2d30a8.png)
 
+# Ribbon 基本应用
+Ribbon是客户端负载均衡，所以肯定集成在消费端，也就是consumer端
+## 修改consumer-80
+添加Ribbon依赖
+```
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-eureka</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-ribbon</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+```
+修改application.yml
+```
+eureka:
+  client:
+    #false 由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以也设置为false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
+```
+SpringCloudConfig添加负载均衡配置
+即 在调用服务的RestTemplate上添加@LoadBalanced注解即可
+```
+/**
+ * SpringCloud相关配置
+ * @author Administrator
+ *
+ */
+@Configuration
+public class SpringCloudConfig {
+
+    /**
+     * 调用服务模版
+     * @return
+     */
+    @Bean
+    @LoadBalanced  // 引入ribbon负载均衡
+    public RestTemplate getRestTemplate(){
+        return new RestTemplate();
+    }
+}
+```
+启动类需要添加上@EnableEurekaClient注解
+```
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+@EnableEurekaClient
+public class ConsumerApp_80 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerApp_80.class, args);
+    }
+}
+```
+修改provider的application.yml
+指定当前服务的名称 因为consumer调用时需要通过服务名称进行调用
+```
+# 数据源配置
+spring:
+  application:
+  # 服务名称 消费者需要通过该名称进行调用服务
+    name: provider-1001
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false
+```
+controller调用服务的PRE_URL改为服务名称
+```
+private static String PRE_URL="http://provider-1001";
+```
+测试
+启动三个eureka注册中心，然后启动provider 最后启动consumer进行服务调用
 
 
 

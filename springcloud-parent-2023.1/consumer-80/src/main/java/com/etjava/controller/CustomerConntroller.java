@@ -20,7 +20,7 @@ public class CustomerConntroller {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	private static String PRE_URL="http://localhost:1001";
+	private static String PRE_URL="http://provider-1001";
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("/list")

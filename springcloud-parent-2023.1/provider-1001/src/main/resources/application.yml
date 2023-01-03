@@ -4,6 +4,8 @@ server:
  
 # 数据源配置
 spring:
+  application:
+  # 服务名称 消费者需要通过该名称进行调用服务    name: provider-1001
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -20,7 +22,7 @@ spring:
 eureka:
   instance:
     hostname: localhost  #eureka客户端主机实例名称
-    appname: microservice-student  #客户端服务名
+    appname: provider-1001  #客户端服务名
     instance-id: microservice-student:1001 #客户端实例名称
     prefer-ip-address: true #显示IP
   client: 
