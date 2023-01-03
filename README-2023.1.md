@@ -447,9 +447,173 @@ info:
 ![image](https://user-images.githubusercontent.com/47961027/210302177-133a30cf-00a8-4cad-b14d-3f77b717af8c.png)
 
 # eureka高可用集群搭建
+当面对高并发时需要采用集群方式应对 (注册中心集群，服务提供者集群)
+## 新建两个eureka server
+### eureka-2001
+依赖
+```
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka-server</artifactId>
+    </dependency>
+    <!-- 修改后立即生效，热部署 -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>springloaded</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+</dependencies>
+```
+eureka-2001启动类
+```
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApp_2001 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApp_2001.class, args);
+    }
+}
+```
+eureka-2001 配置文件
+```
+server:
+  port: 2001
+  context-path: /
+
+eureka:
+  instance:
+    # 单机 hostname: localhost #eureka注册中心实例名称
+    hostname: eureka2001.etjava.com # 集群
+  client:
+    #false 由于该应用为注册中心，所以设置为false,代表不向注册中心注册自己。
+    register-with-eureka: false
+    #false 由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以也设置为false
+    fetch-registry: false
+    service-url:
+      # 集群
+      defaultZone: http://eureka2000.etjava.com:2000/eureka/,http://eureka2002.etjava.com:2002/eureka/
+      #单机defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/       #设置与Eureka注册中心交互的地址，查询服务和注册服务用到
+```
+### eureka-2002
+eureka-2002 依赖
+```
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka-server</artifactId>
+    </dependency>
+    <!-- 修改后立即生效，热部署 -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>springloaded</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+</dependencies>
+```
+eureka-2002 启动类
+```
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApp_2002 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApp_2002.class, args);
+    }
+}
+```
+eureka-2002 application.yml
+```
+server:
+  port: 2002
+  context-path: /
+
+eureka:
+  instance:
+    # 单机 hostname: localhost #eureka注册中心实例名称
+    hostname: eureka2002.etjava.com # 集群
+  client:
+    #false 由于该应用为注册中心，所以设置为false,代表不向注册中心注册自己。
+    register-with-eureka: false
+    #false 由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以也设置为false
+    fetch-registry: false
+    service-url:
+      # 集群
+      defaultZone: http://eureka2000.etjava.com:2000/eureka/,http://eureka2001.etjava.com:2001/eureka/
+      #单机defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/       #设置与Eureka注册中心交互的地址，查询服务和注册服务用到
+```
+### eureka-2000
+eureka-2000 配置文件修改
+添加注册集群地址 注意不能自己注册自己
+```
+eureka:
+  instance:
+    #eureka注册中心实例名称
+    hostname: localhost
+  client:
+    #false 由于该应用为注册中心，所以设置为false,代表不向注册中心注册自己。
+    register-with-eureka: false
+    #false 由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以也设置为false
+    fetch-registry: false
+    service-url:
+       #设置与Eureka注册中心交互的地址，查询服务和注册服务用到  ==> http://localhost:2000/eureka
+       # defaultZone:  http://${eureka.instance.hostname}:${server.port}/eureka/
+       defaultZone: http://eureka2001.etjava.com:2001/eureka/,http://eureka2002.etjava.com:2002/eureka/
+```
+### provider-1001 服务提供者
+修改defaultZone为集群模式
+```
+server:
+  port: 1001
+  context-path: /
+
+# 数据源配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false
+
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: microservice-student  #客户端服务名
+    instance-id: microservice-student:1001 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client:
+    service-url:
+      #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
+#      defaultZone: http://localhost:2000/eureka
+# 单机    defaultZone: http://localhost:2001/eureka   #把服务注册到eureka注册中心
+     # 集群
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
 
 
 
-
-
+info:
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: Tom
+   联系电话: 123456
+```
+### 启动测试
+首先启动三个eureka server ,然后在启动provider
 

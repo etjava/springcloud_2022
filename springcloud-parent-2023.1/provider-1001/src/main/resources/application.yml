@@ -26,7 +26,12 @@ eureka:
   client: 
     service-url: 
       #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
-      defaultZone: http://localhost:2000/eureka
+#      defaultZone: http://localhost:2000/eureka
+# 单机    defaultZone: http://localhost:2001/eureka   #把服务注册到eureka注册中心
+     # 集群
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/ 
       
       
       

@@ -43,6 +43,8 @@
 		<module>provider-1001</module>
 		<module>consumer-80</module>
 		<module>eureka-2000</module>
+		<module>eureka-2001</module>
+		<module>eureka-2002</module>
 	</modules>
 
 	<!-- 构建的时候 解析 src/main/resources 下的配置文件 其实就是application.yml 解析以$开头和结尾的信息 -->
