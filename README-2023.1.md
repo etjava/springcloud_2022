@@ -741,11 +741,14 @@ public Map<String,Object> getInfo(){
 测试Ribbon的默认方式(默认轮询)
 启动三个eureka,三个provider,consumer进行访问
 
-// 图片
+![image-20230104003710109](C:\Users\etjav\AppData\Roaming\Typora\typora-user-images\image-20230104003710109.png)
+
+![image-20230104003724954](C:\Users\etjav\AppData\Roaming\Typora\typora-user-images\image-20230104003724954.png)
 
 测试负载均衡
 修改consumer的SpringCloudConfig
 添加IRule
+
 ```
  /**
  * 自定义轮询算法
