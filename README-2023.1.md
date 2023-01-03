@@ -969,6 +969,8 @@ public class ConsumerFeignApp_80 {
 # Hystrix 断路器
 在微服务系统中 服务调用失败是不可避免的，例如网络超时，服务自身出现异常等，那么要怎么保证在一个服务出现异常时 不会导致整体服务失败呢，这个就是Hystrix需要做的事情
 Hystrix提供了熔断，隔离，Fallback，Cache，监控等功能，能够在一个或多个服务出现异常时保证系统依然可用
+Hystrix可以使用在服务提供者中，也可以使用在服务消费者中
+在整合Feign之前 添加在服务提供者中 当去调用服务提供者的方法时 如方法出现超时则会进行熔断降级
 ## 服务的雪崩效应
 正常访问如下图
 ![image](https://user-images.githubusercontent.com/47961027/210410671-98db6175-4a9e-44a5-8ebf-095e9971d2e6.png)
@@ -1202,5 +1204,22 @@ public class CustomerConntroller {
 
 ![image](https://user-images.githubusercontent.com/47961027/210416413-fc5a55db-224a-465a-ac79-c155323e77bb.png)
 
-
+## Hystrix默认超时时间设置
+hystrix-core.jar com.netflix.hystrix包下的HystrixCommandProperties类
+default_executionTimeoutInMilliseconds属性默认的超时时间 默认1s
+可以通过在application.yml中修改其默认超时时间
+修改provider-hystrix-1004
+application.yml
+添加hystrix超时时间配置
+```
+# hystrix 超时时间配置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+```
+然后再次测试 如下
 

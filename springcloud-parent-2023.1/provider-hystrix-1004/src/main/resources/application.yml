@@ -35,7 +35,16 @@ eureka:
                    http://eureka2002.etjava.com:2002/eureka/,
                    http://eureka2000.etjava.com:2000/eureka/ 
       
-      
+# hystrix 超时时间配置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+     
       
 info:
    groupId: $project.groupId$
