@@ -968,8 +968,17 @@ public class ConsumerFeignApp_80 {
 
 # Hystrix 断路器
 在微服务系统中 服务调用失败是不可避免的，例如网络超时，服务自身出现异常等，那么要怎么保证在一个服务出现异常时 不会导致整体服务失败呢，这个就是Hystrix需要做的事情
-
 Hystrix提供了熔断，隔离，Fallback，Cache，监控等功能，能够在一个或多个服务出现异常时保证系统依然可用
+## 服务的雪崩效应
+正常访问如下图
+![image](https://user-images.githubusercontent.com/47961027/210410671-98db6175-4a9e-44a5-8ebf-095e9971d2e6.png)
+但是当请求的服务出现异常时 其它用户的请求将被阻塞 如下图
+![image](https://user-images.githubusercontent.com/47961027/210410836-4873253b-5213-4078-8bb7-d743082b2645.png)
+如果多个用户请求一直处于阻塞状态就会导致整体服务不可使用 这种情况就是服务雪崩
+![image](https://user-images.githubusercontent.com/47961027/210410980-2611cac1-5411-46a0-825e-979933525d30.png)
+## 解决雪崩效应 
+Hystrix服务熔断降级 @HystrixCommand fallbackMethod
+熔断机制是应对服务雪崩效应的一种微服务链路保护机制，当某个服务不可用或响应超时 会进行服务降级处理，进而熔断该节点的服务调用 快速返回自定义错误信息
 
 
 
