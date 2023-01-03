@@ -740,10 +740,10 @@ public Map<String,Object> getInfo(){
 ```
 测试Ribbon的默认方式(默认轮询)
 启动三个eureka,三个provider,consumer进行访问
+![70d08f5cdbe9ebc1659c88b6c8f30c7](https://user-images.githubusercontent.com/47961027/210400792-5297bcb4-3629-4f63-b3f9-64ca0928a62d.png)
+![1f9c2a18ece068217812d0f6e11b47d](https://user-images.githubusercontent.com/47961027/210400807-3d28bfc5-6d69-4600-a429-ea3facbd9d14.png)
 
-![image-20230104003710109](C:\Users\etjav\AppData\Roaming\Typora\typora-user-images\image-20230104003710109.png)
 
-![image-20230104003724954](C:\Users\etjav\AppData\Roaming\Typora\typora-user-images\image-20230104003724954.png)
 
 测试负载均衡
 修改consumer的SpringCloudConfig
