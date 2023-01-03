@@ -773,3 +773,196 @@ Ribbon负载均衡策略
 | RandomRule                | public class RandomRule extends AbstractLoadBalancerRule     | 随机选择一个server                                           | 在index上随机，选择index对应位置的server                     |
 | ZoneAvoidanceRule         | public class ZoneAvoidanceRule extends PredicateBasedRule    | 复合判断server所在区域的性能和server的可用性选择server       | 使用ZoneAvoidancePredicate和AvailabilityPredicate来判断是否选择某个server，前一个判断判定一个zone的运行性能是否可用，剔除不可用的zone（的所有server），AvailabilityPredicate用于过滤掉连接数过多的Server |
 
+# Feign简介
+Feign是一个声明式的Web Service客户端，它使得编写Web Serivce客户端变得更加简单。我们只需要使用Feign来创建一个接口并用注解来配置它既可完成。它具备可插拔的注解支持，包括Feign注解和JAX-RS注解。Feign也支持可插拔的编码器和解码器。Spring Cloud为Feign增加了对Spring MVC注解的支持，还整合了Ribbon和Eureka来提供均衡负载的HTTP客户端实现
+前面Ribbon调用服务提供者，我们通过restTemplate调用，缺点是，多个地方调用，同一个请求要写多次，不方便统一维护，这时候Feign来了，就直接把请求统一搞一个service作为FeignClient，然后其他调用Controller需要用到的，直接注入service，直接调用service方法即可；同时Feign整合了Ribbon和Eureka，所以要配置负载均衡的话，直接配置Ribbon即可，无其他特殊地方；当然Fiegn也整合了服务容错保护，断路器Hystrix
+简单理解 Fiegn就是封装了Ribbon同时又对SpringMVC进行了封装 我们在调用微服务时可以像SpringMVC那样去编写service调用业务层
+
+## Feign应用
+
+首先在common模块里建一个service（实际项目肯定是多个service）作为Feign客户端，用Feign客户端来调用服务提供者，当然可以配置负载均衡；Feign客户端定义的目的，就是为了方便给其他项目调用；
+### common-2023.1
+
+添加依赖
+
+```
+<!-- Feign依赖 -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-feign</artifactId>
+</dependency>
+```
+新建FeignClientService接口
+该接口必须使用@FeignClient``(value=``"provider-1001")注解 同时指定需要调用的服务名称
+接口中方法借鉴provider服务提供者
+
+```
+@FeignClient(value="provider-1001")
+public interface FeignClientService {
+
+    /**
+     * 添加或者修改老师信息
+     * @param Teacher
+     */
+    @PostMapping(value="/tea/save")
+    public void save(Teacher teacher);
+
+    /**
+     * 根据id查找老师信息
+     * @param id
+     * @return
+     */
+    @GetMapping(value="/tea/findById/{id}")
+    public Teacher findById(@PathVariable("id") Integer id);
+
+    /**
+     * 查询老师信息
+     * @return
+     */
+    @GetMapping(value="/tea/list")
+    public List<Teacher> list();
+
+    /**
+     * 根据id删除老师信息
+     * @param id
+     */
+    @GetMapping(value="/tea/delete/{id}")
+    public void delete(@PathVariable("id") Integer id);
+
+    /**
+     * 获取信息
+     * @return
+     */
+    @GetMapping(value="/tea/getInfo")
+    public Map<String,Object> getInfo();
+    @GetMapping(value="/tea/get/{id}")
+    public Teacher get(Integer id) ;
+}
+
+```
+公共模块修改完成后需要重新install 方便其它模块调用
+
+### 新建消费者 consumer-feign-80
+添加依赖
+```
+<dependencies>
+	<dependency>
+		<groupId>com.etjava</groupId>
+		<artifactId>common-2023.1</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-eureka</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-ribbon</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-config</artifactId>
+	</dependency>
+        <!-- Feign依赖 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-feign</artifactId>
+    </dependency>
+</dependencies>
+```
+创建application.yml配置文件
+```
+server:
+  port: 80
+  context-path: /
+
+eureka:
+  client:
+    #false 由于注册中心的职责就是维护服务实例，它并不需要去检索服务，所以也设置为false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
+
+```
+创建Controller
+因为现在用Fiegn，所以把restTemplate去掉，改成注入service，调用service方法来实现服务的调用；
+```
+package com.etjava.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.etjava.entity.Teacher;
+import com.etjava.service.FeignClientService;
+
+@RestController
+@RequestMapping("/tea")
+public class CustomerConntroller {
+
+
+    @Autowired
+    private FeignClientService feignClientService;
+
+
+    @GetMapping("/list")
+    public List<Teacher> list(){
+        return feignClientService.list();
+    }
+
+    @GetMapping("/getInfo")
+    public Map<String,Object> getInfo(){
+        return feignClientService.getInfo();
+    }
+
+    @GetMapping("/get/{id}")
+    public Teacher get(@PathVariable("id") Integer id) {
+        return feignClientService.get(id);
+    }
+
+    @PostMapping("/save")
+    public boolean save(@RequestBody Teacher teacher) {
+        try {
+            feignClientService.save(teacher);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}
+
+```
+启动类
+启动类需要添加@EnableFeignClients注解开启Feign  否则@FeignClient无法注入
+```
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+@EnableEurekaClient
+@EnableFeignClients
+public class ConsumerFeignApp_80 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerFeignApp_80.class, args);
+    }
+}
+```
+测试
+启动三个eureka,三个provider,最后启动带有feign的consumer进行调用
+
+
+
+
+

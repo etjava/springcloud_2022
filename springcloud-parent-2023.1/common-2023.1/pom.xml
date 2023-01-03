@@ -26,6 +26,12 @@
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-devtools</artifactId>
 	    </dependency>
+	    
+	    <!-- Feign依赖 -->
+	    <dependency>
+	        <groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-feign</artifactId>
+	    </dependency>
 	</dependencies>
 
 	<build>
