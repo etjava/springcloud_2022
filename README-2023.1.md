@@ -389,8 +389,54 @@ eureka:
 @EnableEurekaClient
 
 ## 测试
+启动eureka 在启动服务提供者
 
 
 
+## 配置点击示例时提示信息
+未配置之前点击示例会出现404 这样是很不友好的，这里我们可以在每个服务提供者中添加当前服务的说明信息
+当点击实例时就可以看到具体的服务提供者相关信息了
 
-
+### 配置方式
+springcloud-parent-2023.1 父项目中添加依赖
+```
+<!-- 构建的时候 解析 src/main/resources 下的配置文件 其实就是application.yml 解析以$开头和结尾的信息 -->
+<build>
+    <finalName>springcloud-parent-2023.1</finalName>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <configuration>
+                <delimiters>
+                    <delimit>$</delimit>
+                </delimiters>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+provider-1001 服务提供者添加依赖
+```
+<!-- actuator监控引入 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+服务提供者的配置文件添加项目描述信息
+application.yml
+```
+info:
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: Tom
+   联系电话: 123456
+```

@@ -27,3 +27,12 @@ eureka:
     service-url: 
       #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
       defaultZone: http://localhost:2000/eureka
+      
+      
+      
+info:
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: Tom
+   联系电话: 123456

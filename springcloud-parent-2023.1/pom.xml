@@ -44,4 +44,26 @@
 		<module>consumer-80</module>
 		<module>eureka-2000</module>
 	</modules>
+
+	<!-- 构建的时候 解析 src/main/resources 下的配置文件 其实就是application.yml 解析以$开头和结尾的信息 -->
+	<build>
+		<finalName>springcloud-parent-2023.1</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<delimiters>
+						<delimit>$</delimit>
+					</delimiters>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
