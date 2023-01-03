@@ -1198,3 +1198,9 @@ public class CustomerConntroller {
 测试
 启动三个eureka,provider-hystrix-1004服务提供者，最后启动consumer-hystrix-80进行测试
 
+![image](https://user-images.githubusercontent.com/47961027/210416308-b24ad346-bee9-4f68-8b8b-60453563d53c.png)
+
+![image](https://user-images.githubusercontent.com/47961027/210416413-fc5a55db-224a-465a-ac79-c155323e77bb.png)
+
+
+
