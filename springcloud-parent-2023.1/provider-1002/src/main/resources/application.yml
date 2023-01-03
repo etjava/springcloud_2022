@@ -1,0 +1,45 @@
+server:
+  port: 1002
+  context-path: /
+ 
+# 数据源配置
+spring:
+  application:
+  # 服务名称 消费者需要通过该名称进行调用服务    name: provider-1001
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false
+    
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: provider-1001  #客户端服务名
+    instance-id: microservice-student:1002 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client: 
+    service-url: 
+      #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
+#      defaultZone: http://localhost:2000/eureka
+# 单机    defaultZone: http://localhost:2001/eureka   #把服务注册到eureka注册中心
+     # 集群
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/ 
+      
+      
+      
+info:
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: Tom
+   联系电话: 123456

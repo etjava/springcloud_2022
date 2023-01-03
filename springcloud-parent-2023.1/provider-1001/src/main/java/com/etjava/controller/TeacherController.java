@@ -1,6 +1,8 @@
 package com.etjava.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,13 @@ public class TeacherController {
 	@GetMapping("/list")
 	public List<Teacher> list(){
 		return teacherService.list();
+	}
+	
+	@GetMapping("/getInfo")
+	public Map<String,Object> getInfo() {
+		Map<String,Object> map = new HashMap<>();
+		map.put("info",1001);
+		return map;
 	}
 	
 	@GetMapping("/get/{id}")

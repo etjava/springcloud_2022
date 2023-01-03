@@ -1,5 +1,6 @@
 package com.etjava.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,40 +11,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.etjava.entity.Teacher;
+import com.etjava.service.TeacherService;
 
 @RestController
 @RequestMapping("/tea")
-public class CustomerConntroller {
+public class TeacherController {
 
 	@Autowired
-	private RestTemplate restTemplate;
+	private TeacherService teacherService;
 	
-	private static String PRE_URL="http://provider-1001";
-	
-	@SuppressWarnings("unchecked")
 	@GetMapping("/list")
 	public List<Teacher> list(){
-		return restTemplate.getForObject(PRE_URL+"/tea/list", List.class);
+		return teacherService.list();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping("/getInfo")
-	public Map<String,Object> getInfo(){
-		return restTemplate.getForObject(PRE_URL+"/tea/getInfo", Map.class);
+	public Map<String,Object> getInfo() {
+		Map<String,Object> map = new HashMap<>();
+		map.put("info",1003);
+		return map;
 	}
 	
 	@GetMapping("/get/{id}")
 	public Teacher get(@PathVariable("id") Integer id) {
-		return restTemplate.getForObject(PRE_URL+"/tea/get/"+id, Teacher.class);
+		return teacherService.findById(id);
 	}
 	
 	@PostMapping("/save")
 	public boolean save(@RequestBody Teacher teacher) {
 		try {
-			restTemplate.postForObject(PRE_URL+"/tea/save", teacher, Boolean.class);
+			teacherService.save(teacher);
 			return true;
 		} catch (Exception e) {
 			return false;

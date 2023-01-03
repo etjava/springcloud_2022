@@ -715,6 +715,58 @@ private static String PRE_URL="http://provider-1001";
 启动三个eureka注册中心，然后启动provider 最后启动consumer进行服务调用
 ![image](https://user-images.githubusercontent.com/47961027/210366634-9fc9f667-7116-4939-8fdc-6fa4ca4e4e9f.png)
 # Ribbon 负载均衡
+上述demo还没实现真正负载均衡，这里要在搞两个服务提供者并搞成集群(已有provider-1001)，然后才能演示负载均衡，以及负载均衡策略；
+## provider-1002，provider-1003
+依赖，application.yml,业务及启动类均复制provider-1001代码 然后将application.yml修改下端口及instance实例名称即可
+provider-1002
+instance-id: microservice-student:1002
+provider-1003
+instance-id: microservice-student:1003
+做完上述修改后需要在服务提供者的controller中添加打印语句或getInfo方法 方便查看是哪个服务提供者提供的服务
+```
+@GetMapping("/getInfo")
+public Map<String,Object> getInfo() {
+    Map<String,Object> map = new HashMap<>();
+    map.put("info",1001);
+    return map;
+}
+```
+在consumer的controller中添加对应的服务调用方法
+```
+@GetMapping("/getInfo")
+public Map<String,Object> getInfo(){
+    return restTemplate.getForObject(PRE_URL+"/tea/getInfo", Map.class);
+}
+```
+测试Ribbon的默认方式(默认轮询)
+启动三个eureka,三个provider,consumer进行访问
 
+// 图片
 
+测试负载均衡
+修改consumer的SpringCloudConfig
+添加IRule
+```
+ /**
+ * 自定义轮询算法
+ * RetryRule 重试机制
+ * 在一个配置时间段内当选择server不成功，则一直尝试使用subRule的方式选择一个可用的server
+ * @return
+ */
+@Bean
+public IRule myRule(){
+    return new RetryRule();
+}
+```
+Ribbon负载均衡策略
+
+| 策略名                    | 策略声明                                                     | 策略描述                                                     | 实现说明                                                     |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| BestAvailableRule         | public class BestAvailableRule extends ClientConfigEnabledRoundRobinRule | 选择一个最小的并发请求的server                               | 逐个考察Server，如果Server被tripped了，则忽略，在选择其中ActiveRequestsCount最小的server |
+| AvailabilityFilteringRule | public class AvailabilityFilteringRule extends PredicateBasedRule | 过滤掉那些因为一直连接失败的被标记为circuit tripped的后端server，并过滤掉那些高并发的的后端server（active connections 超过配置的阈值） | 使用一个AvailabilityPredicate来包含过滤server的逻辑，其实就就是检查status里记录的各个server的运行状态 |
+| WeightedResponseTimeRule  | public class WeightedResponseTimeRule extends RoundRobinRule | 根据响应时间分配一个weight，响应时间越长，weight越小，被选中的可能性越低 | 一个后台线程定期的从status里面读取评价响应时间，为每个server计算一个weight。Weight的计算也比较简单responsetime 减去每个server自己平均的responsetime是server的权重。当刚开始运行，没有形成status时，使用roubine策略选择server。 |
+| RetryRule                 | public class RetryRule extends AbstractLoadBalancerRule      | 对选定的负载均衡策略机上重试机制                             | 在一个配置时间段内当选择server不成功，则一直尝试使用subRule的方式选择一个可用的server |
+| RoundRobinRule            | public class RoundRobinRule extends AbstractLoadBalancerRule | roundRobin方式轮询选择server                                 | 轮询index，选择index对应位置的server                         |
+| RandomRule                | public class RandomRule extends AbstractLoadBalancerRule     | 随机选择一个server                                           | 在index上随机，选择index对应位置的server                     |
+| ZoneAvoidanceRule         | public class ZoneAvoidanceRule extends PredicateBasedRule    | 复合判断server所在区域的性能和server的可用性选择server       | 使用ZoneAvoidancePredicate和AvailabilityPredicate来判断是否选择某个server，前一个判断判定一个zone的运行性能是否可用，剔除不可用的zone（的所有server），AvailabilityPredicate用于过滤掉连接数过多的Server |
 
