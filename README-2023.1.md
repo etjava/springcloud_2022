@@ -1225,14 +1225,51 @@ hystrix:
 只修改provider-hystrix-1004中的application配置文件中的hystrix默认超时时间
 ![image](https://user-images.githubusercontent.com/47961027/210418919-e5d83f85-b4a2-483a-baae-dabb81fc9181.png)
 
-## Feign Hystrix整合&服务熔断服务降级彻底解耦
+# Hystrix服务监控Dashboard
+Hystrix服务监控Dashboard仪表盘
+Hystrix提供了 准实时的服务调用监控项目Dashboard，能够实时记录通过Hystrix发起的请求执行情况,可以通过图表的形式展现给用户看
 
+## 创建Dashbord服务监控 - 单个服务监控
+consumer-hystrix-dashboard-90
+添加依赖
+```
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+</dependencies>
+```
+aplication.yml
+```
+server:
+  port: 90
+  context-path: /
+```
+启动类
+ConsumerDashBoardApplication_90
+需要开启Dashbord监控  @EnableHystrixDashboard
+```
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+@EnableHystrixDashboard
+public class ConsumerDashBoardApplication_90 {
 
-
-
-
-
-
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerDashBoardApplication_90.class, args);
+    }
+}
+```
+测试
+统一测试
+启动Dashbord监控台，启动三个eureka，带有hystrix的provider 及 consumer-hystrix服务消费者
 
 
 

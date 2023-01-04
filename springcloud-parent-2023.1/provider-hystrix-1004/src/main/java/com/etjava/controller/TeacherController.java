@@ -31,7 +31,7 @@ public class TeacherController {
 	@GetMapping("/getInfo")
 	public Map<String,Object> getInfo() {
 		Map<String,Object> map = new HashMap<>();
-		map.put("info",1003);
+		map.put("info",1004);
 		return map;
 	}
 	
@@ -41,16 +41,22 @@ public class TeacherController {
 	 * @return
 	 * @throws InterruptedException 
 	 */
+//	@GetMapping(value="/validHystrix")
+//	public Map<String,Object> validHystrix() throws InterruptedException{
+////	    Thread.sleep(100);
+//	    return teacherService.validHystrix();
+//	}
+	
 	@GetMapping(value="/validHystrix")
 	@HystrixCommand(fallbackMethod="getInfoFallback")
 	public Map<String,Object> validHystrix() throws InterruptedException{
-	    Thread.sleep(2000);
+	    Thread.sleep(200);
 	    Map<String,Object> map=new HashMap<String,Object>();
 	    map.put("code", 200);
 	    map.put("info", "业务数据-----1004");
 	    return map;
 	}
-	 
+
 	public Map<String,Object> getInfoFallback() throws InterruptedException{
 	    Map<String,Object> map=new HashMap<String,Object>();
 	    map.put("code", 500);

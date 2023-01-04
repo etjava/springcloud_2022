@@ -1,6 +1,7 @@
 package com.etjava.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.etjava.entity.Teacher;
 
@@ -30,4 +31,11 @@ public interface TeacherService {
      * @param id
      */
     public void delete(Integer id);
+    
+    /**
+     * 测试熔断机制
+     * @return
+     * @throws InterruptedException
+     */
+    public Map<String,Object> validHystrix() throws InterruptedException;
 }
