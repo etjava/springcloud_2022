@@ -1282,15 +1282,190 @@ http://localhost:1004/hystrix.stream
 ![b490fe1615a63484b0129da38de7159](https://user-images.githubusercontent.com/47961027/210481375-e7ccefbf-d84e-46ca-8693-f6870484b077.png)
 
 # Hystrix集群监控turbine
+集群监控是通过Turibine实现的，Turibine是基于Dashboard
+## 在搞个带有熔断(hystrix)服务提供者 参考前面的provider-hystrix-1004
+### provider-hystrix-1005
+添加依赖
+```
+<dependencies>
+    <dependency>
+        <groupId>com.etjava</groupId>
+        <artifactId>common-2023.1</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid</artifactId>
+    </dependency>
+    <!-- eureka注册中心依赖 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+
+    <!-- actuator监控引入 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- hystrix熔断相关依赖 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix</artifactId>
+    </dependency>
+</dependencies>
+```
+application.yml
+修改port及instance-id
+```
+server:
+  port: 1005
+  context-path: /
+
+# 数据源配置
+spring:
+  application:
+  # 服务名称 消费者需要通过该名称进行调用服务
+    name: provider-1001
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.199.108:3306/db_springcloud
+    username: root
+    password: Karen@1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  thymeleaf:
+    cache: false
+
+eureka:
+  instance:
+    hostname: localhost  #eureka客户端主机实例名称
+    appname: provider-1001  #客户端服务名
+    instance-id: provider-hystrix:1005 #客户端实例名称
+    prefer-ip-address: true #显示IP
+  client:
+    service-url:
+      #把服务注册到eureka注册中心  这里的地址需要与eureka注册中心暴漏的地址一致 否则找不到注册中心
+#      defaultZone: http://localhost:2000/eureka
+# 单机    defaultZone: http://localhost:2001/eureka   #把服务注册到eureka注册中心
+     # 集群
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
+
+# hystrix 超时时间配置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
 
 
 
+info:
+   groupId: $project.groupId$
+   artifactId: $project.artifactId$
+   version: $project.version$
+   负责人: Hystrix
+   联系电话: 123456
+```
+启动类
+```
+@SpringBootApplication
+@EnableEurekaClient
+@EnableCircuitBreaker // 开启熔断
+public class ProviderApp_1005 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ProviderApp_1005.class, args);
+    }
+}
+```
+controller中调整返回数据
+```
+@GetMapping(value="/validHystrix")
+@HystrixCommand(fallbackMethod="getInfoFallback")
+public Map<String,Object> validHystrix() throws InterruptedException{
+    Thread.sleep(200);
+    Map<String,Object> map=new HashMap<String,Object>();
+    map.put("code", 200);
+    map.put("info", "业务数据-----1005");
+    return map;
+}
+```
+repository,service在1004中复制一份即可
+
+### 然后创建带turbine的consumer
+consumer-hystrix-turbine-91
+添加依赖
+```
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-turbine</artifactId>
+    </dependency>
+</dependencies>
+```
+application.yml
+```
+
+```
+启动类
+需要开启turbine
+```
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+@EnableTurbine
+public class ConsumerTurbineApplication_91 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerTurbineApplication_91.class, args);
+    }
+}
+```
+测试
+三个eureka,
+consumer-hystrix-80(方便测试集群的服务调用) ,
+provider-hystrix-1004,provider-hystrix-1005, 带有Hystrix熔断机制的服务提供者
+consumer-hystrix-dashboard-90，dashboard仪表盘
+consumer-hystrix-turbine-91 集群监控
+
+启动完成后测试集群监控
+http://localhost:91/turbine.stream
+
+通过仪表盘进行测试
+http://localhost:91/turbine.stream
 
 
-
-
-
-
-
+至此监控带有熔断机制的服务提供者的集群就完成了 可以通过图形化进行分析有哪些服务出现异常等信息
 
 

@@ -1,0 +1,18 @@
+server: 
+  port: 91
+  context-path: /
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
+
+turbine:
+  app-config: provider-1001   # 指定要监控的应用名称
+  clusterNameExpression: "'default'" #表示集群的名字为default
+
+spring:
+  application:
+    name: turbine  

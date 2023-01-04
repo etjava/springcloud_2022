@@ -51,6 +51,8 @@
 		<module>provider-hystrix-1004</module>
 		<module>consumer-hystrix-80</module>
 		<module>consumer-hystrix-dashboard-90</module>
+		<module>provider-hystrix-1005</module>
+		<module>consumer-hystrix-turbine-91</module>
 	</modules>
 
 	<!-- 构建的时候 解析 src/main/resources 下的配置文件 其实就是application.yml 解析以$开头和结尾的信息 -->
