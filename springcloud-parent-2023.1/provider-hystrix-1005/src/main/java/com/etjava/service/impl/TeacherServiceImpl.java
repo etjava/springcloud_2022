@@ -41,7 +41,7 @@ public class TeacherServiceImpl implements TeacherService{
 	public Map<String, Object> validHystrix() throws InterruptedException {
 	    Map<String,Object> map=new HashMap<String,Object>();
 	    map.put("code", 200);
-	    map.put("info", "业务数据-----1004");
+	    map.put("info", "业务数据-----1005");
 	    return map;
 	}
 

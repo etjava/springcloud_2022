@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.etjava.entity.Teacher;
 import com.etjava.service.TeacherService;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @RestController
 @RequestMapping("/tea")
@@ -41,27 +40,10 @@ public class TeacherController {
 	 * @return
 	 * @throws InterruptedException 
 	 */
-//	@GetMapping(value="/validHystrix")
-//	public Map<String,Object> validHystrix() throws InterruptedException{
-////	    Thread.sleep(100);
-//	    return teacherService.validHystrix();
-//	}
-	
-	@GetMapping(value="/validHystrix")
-	@HystrixCommand(fallbackMethod="getInfoFallback")
+	@GetMapping("/validHystrix")
 	public Map<String,Object> validHystrix() throws InterruptedException{
-	    Thread.sleep(200);
-	    Map<String,Object> map=new HashMap<String,Object>();
-	    map.put("code", 200);
-	    map.put("info", "业务数据-----1005");
-	    return map;
-	}
-
-	public Map<String,Object> getInfoFallback() throws InterruptedException{
-	    Map<String,Object> map=new HashMap<String,Object>();
-	    map.put("code", 500);
-	    map.put("info", "系统出错，稍后重试");
-	    return map;
+	    Thread.sleep(5000);
+	    return teacherService.validHystrix();
 	}
 	
 	@GetMapping("/get/{id}")

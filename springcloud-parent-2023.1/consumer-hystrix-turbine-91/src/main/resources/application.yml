@@ -10,8 +10,8 @@ eureka:
                    http://eureka2000.etjava.com:2000/eureka/
 
 turbine:
-  app-config: provider-1001   # 指定要监控的应用名称
-  clusterNameExpression: "'default'" #表示集群的名字为default
+  app-config: provider-1001   # 指定要监控的应用名称 多个应用使用逗号隔开
+  clusterNameExpression: "'default'" #表示集群的名字为default 如果不使用default 则需要通过cluster=[clusterName]指定
 
 spring:
   application:

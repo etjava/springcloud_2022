@@ -35,33 +35,11 @@ public class TeacherController {
 		return map;
 	}
 	
-	 /**
-	 * 测试验证带有熔断机制服务
-	 * @HystrixCommand 标注当出现访问超时或方法报错时 调用fallbackMethod指定的方法进行返回
-	 * @return
-	 * @throws InterruptedException 
-	 */
-//	@GetMapping(value="/validHystrix")
-//	public Map<String,Object> validHystrix() throws InterruptedException{
-////	    Thread.sleep(100);
-//	    return teacherService.validHystrix();
-//	}
 	
-	@GetMapping(value="/validHystrix")
-	@HystrixCommand(fallbackMethod="getInfoFallback")
+	@GetMapping("/validHystrix")
 	public Map<String,Object> validHystrix() throws InterruptedException{
-	    Thread.sleep(200);
-	    Map<String,Object> map=new HashMap<String,Object>();
-	    map.put("code", 200);
-	    map.put("info", "业务数据-----1004");
-	    return map;
-	}
-
-	public Map<String,Object> getInfoFallback() throws InterruptedException{
-	    Map<String,Object> map=new HashMap<String,Object>();
-	    map.put("code", 500);
-	    map.put("info", "系统出错，稍后重试");
-	    return map;
+	    Thread.sleep(500);
+	    return teacherService.validHystrix();
 	}
 	
 	@GetMapping("/get/{id}")

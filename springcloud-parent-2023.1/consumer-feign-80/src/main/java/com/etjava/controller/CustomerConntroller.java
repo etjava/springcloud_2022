@@ -47,4 +47,9 @@ public class CustomerConntroller {
 			return false;
 		}
 	}
+	
+	@GetMapping("/validHystrix")
+	public Map<String,Object> validHystrix() throws InterruptedException{
+	    return feignClientService.validHystrix();
+	}
 }

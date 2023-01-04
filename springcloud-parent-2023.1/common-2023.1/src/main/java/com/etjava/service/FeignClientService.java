@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.etjava.entity.Teacher;
 
-@FeignClient(value="provider-1001")
+@FeignClient(value="provider-1001",fallbackFactory = FeignClientFallbackFactory.class)
 public interface FeignClientService {
 
 	/**
@@ -50,4 +50,13 @@ public interface FeignClientService {
     public Map<String,Object> getInfo();
 	@GetMapping(value="/tea/get/{id}")
     public Teacher get(Integer id) ;
+	
+	
+	/**
+     * 测试熔断机制
+     * @return
+     * @throws InterruptedException
+     */
+	@GetMapping(value="/tea/validHystrix")
+    public Map<String,Object> validHystrix() throws InterruptedException;
 }

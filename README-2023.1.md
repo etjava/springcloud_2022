@@ -1438,7 +1438,24 @@ consumer-hystrix-turbine-91
 ```
 application.yml
 ```
+server:
+  port: 91
+  context-path: /
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka2001.etjava.com:2001/eureka/,
+                   http://eureka2002.etjava.com:2002/eureka/,
+                   http://eureka2000.etjava.com:2000/eureka/
+
+turbine:
+  app-config: provider-1001   # 指定要监控的应用名称 多个应用使用逗号隔开
+  clusterNameExpression: "'default'" #表示集群的名字为default 如果不使用default 则需要通过cluster=[clusterName]指定
+
+spring:
+  application:
+    name: turbine
 ```
 启动类
 需要开启turbine
@@ -1470,4 +1487,36 @@ http://localhost:91/turbine.stream
 
 至此监控带有熔断机制的服务提供者的集群就完成了 可以通过图形化进行分析有哪些服务出现异常等信息
 
-
+## Feign与Hystrix整合&服务熔断服务降级彻底解耦
+使用@HystrixCommand fallbackMethod是很不好的，因为和业务代码耦合度太高，不利于维护，所以需要解耦
+Feign封装了Ribbon及SpringMVC ,Hystrix又集成了Feign 因此可以通过两者的整合实现熔断解耦
+首先修改provider(provider-hystrix-1004,provider-hystrix-1005)
+将controller中测试熔断降级方法改为正常MVC模式(controller调用service)
+service中添加测试方法
+```
+/**
+ * 测试熔断机制
+ * @return
+ * @throws InterruptedException
+ */
+public Map<String,Object> validHystrix() throws InterruptedException;
+```
+serviceImpl
+```
+@Override
+public Map<String, Object> validHystrix() throws InterruptedException {
+    Map<String,Object> map=new HashMap<String,Object>();
+    map.put("code", 200);
+    map.put("info", "业务数据-----1004");
+    return map;
+}
+```
+controller中去掉@HystrixCommand(fallbackMethod="getInfoFallback")
+```
+@GetMapping(value="/validHystrix")
+public Map<String,Object> validHystrix() throws InterruptedException{
+    Thread.sleep(200);
+    return teacherService.validHystrix();
+}
+```
+### common模块中新增FallbackFactory
