@@ -1461,9 +1461,11 @@ consumer-hystrix-turbine-91 集群监控
 
 启动完成后测试集群监控
 http://localhost:91/turbine.stream
+![c2c4b365cd2c88b5ce56719fc648fb0](https://user-images.githubusercontent.com/47961027/210484671-6f091847-b2e1-422a-95a6-8ad02e2f66ee.png)
 
 通过仪表盘进行测试
 http://localhost:91/turbine.stream
+![a6f6e1a3ed0dca1e9a40f7320762b2a](https://user-images.githubusercontent.com/47961027/210484675-cb8c2204-5a1f-4c23-919c-5d4ef7b8bf6e.png)
 
 
 至此监控带有熔断机制的服务提供者的集群就完成了 可以通过图形化进行分析有哪些服务出现异常等信息
