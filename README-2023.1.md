@@ -1270,6 +1270,20 @@ public class ConsumerDashBoardApplication_90 {
 测试
 统一测试
 启动Dashbord监控台，启动三个eureka，带有hystrix的provider 及 consumer-hystrix服务消费者
+先测试Dashbord
+localhost:90/hystrix
+![image](https://user-images.githubusercontent.com/47961027/210481476-a4b1f8c6-8d01-4fe7-8a51-04911c87690a.png)
+测试Dashbord与服务的连通性
+http://localhost:1004/hystrix.stream
+如果出现只有ping没有返回 可以单独访问下服务的方法 然后在进行测试连通性就可以了
+![c3cf004050475c0cda704ab9835d55d](https://user-images.githubusercontent.com/47961027/210481623-f1dc76e8-0e80-46d3-82ed-b1fe7056a8c2.png)
+最后通过仪表板(dashbord)图形化监控测试
+单个服务 使用http://localhost:1004/hystrix.stream
+![b490fe1615a63484b0129da38de7159](https://user-images.githubusercontent.com/47961027/210481375-e7ccefbf-d84e-46ca-8693-f6870484b077.png)
+
+# Hystrix集群监控turbine
+
+
 
 
 
